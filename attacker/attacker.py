@@ -11,8 +11,6 @@ app:Flask = Flask(__name__)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.config['DEBUG'] = False
 
-shared_secret_with_rs:str = "HO2ZVME32GG00X1YC7BO0XG3Y7EC97GDRIDEALI3VXU04T80PN9SQ72D4294"
-
 global camera_ip_address
 global camera_port
 
@@ -34,24 +32,20 @@ def register_credentials() -> Literal['SUCCESS', 'FAILURE']:
     global device_password
     
     json_data:dict[str, str] = request.get_json()
-    shared_secret:str = json_data['shared_secret_with_camera']
-    
-    if shared_secret == shared_secret_with_rs:
         
-        if device_registered == False:
-            device_registered    = True
-            device_uuid     = json_data['uuid']
-            device_username = json_data['device_username']
-            device_password = json_data['device_password']
-            logging.info("DEVICE UUID/CREDENTIALS REGISTERED (%s)" % (device_uuid))
-            logging.debug("uuid: %s, user: %s, pass: %s" % (device_uuid, device_username, device_password))
-        else:
-            logging.info("DEVICE ALREADY REGISTERED (%s)" % (device_uuid))
-            logging.debug("uuid: %s, user: %s, pass: %s" % (device_uuid, device_username, device_password))
-            
-        return "SUCCESS"
+    if device_registered == False:
+        device_registered    = True
+        device_uuid     = json_data['uuid']
+        device_username = json_data['device_username']
+        device_password = json_data['device_password']
+        logging.info("DEVICE UUID/CREDENTIALS REGISTERED (%s)" % (device_uuid))
+        logging.debug("uuid: %s, user: %s, pass: %s" % (device_uuid, device_username, device_password))
     else:
-        return "FAILURE"
+        logging.info("DEVICE ALREADY REGISTERED (%s)" % (device_uuid))
+        logging.debug("uuid: %s, user: %s, pass: %s" % (device_uuid, device_username, device_password))
+        
+    return "SUCCESS"
+
     
 @app.route("/video-footage", methods=['POST'])
 def footage() -> str:

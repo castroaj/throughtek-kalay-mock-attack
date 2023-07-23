@@ -9,9 +9,6 @@ import logging
 db_file:str  = "rs-database.db"
 sql_files:str = [ "rs_device_credentials.sql"]
 
-# Shared secret
-shared_secret_with_camera:str = "HO2ZVME32GG00X1YC7BO0XG3Y7EC97GDRIDEALI3VXU04T80PN9SQ72D4294"
-
 app:Flask = Flask(__name__)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.config['DEBUG'] = False
@@ -27,7 +24,7 @@ def register() -> Literal['SUCCESS', 'FAILURE']:
     uuid:str = json_data['uuid']
     connection:sqlite3.Connection = backend_sql.create_connection(db_file=db_file)
     
-    if rs_business_logic.register_device_with_database(connection, json_data=json_data, shared_secret_with_camera=shared_secret_with_camera):
+    if rs_business_logic.register_device_with_database(connection, json_data=json_data):
         logging.info("SUCESSFULLY REGISTERED DEVICE (%s)" % uuid)
         connection.close()
         return "SUCCESS"

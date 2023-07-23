@@ -6,8 +6,7 @@ import http
 import json
 
 def register_device_with_database(conn, 
-                                  json_data,
-                                  shared_secret_with_camera) -> bool:
+                                  json_data) -> bool:
     def register_device_credentials(uuid,
                                     cam_url:str,
                                     cam_port:int) -> bool:
@@ -41,8 +40,7 @@ def register_device_with_database(conn,
             data:dict[str, str] = { 
                                     "uuid" : uuid, 
                                     "device_username" : device_username,
-                                    "device_password"  : device_password,
-                                    "shared_secret_with_camera" : shared_secret_with_camera
+                                    "device_password"  : device_password
                                   }
             
             json_data:str = json.dumps(data)
