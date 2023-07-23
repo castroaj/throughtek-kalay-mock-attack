@@ -1,10 +1,7 @@
 import http.client
 import json
 import argparse
-
-user:str     = "MOBILE-CLIENT"
-password:str = "PASSWORD123"
-
+import socket
 
 def register_device(url:str,
                     port:int, 
@@ -13,8 +10,11 @@ def register_device(url:str,
     endpoint:str = "/register-device"
     connection:http.client.HTTPConnection = http.client.HTTPConnection(host=url, port=port)
 
+    hostname:str   =socket.gethostname()   
+    ip_address:str =socket.gethostbyname(hostname)  
+
     data:dict[str, str] = { "uuid" : uuid, 
-                            "ip_address" : "123.123.123.123" }
+                            "ip_address" : ip_address }
     
     json_data = json.dumps(data)
     
