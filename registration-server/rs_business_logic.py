@@ -8,14 +8,6 @@ import json
 def register_device_with_database(conn, 
                                   json_data,
                                   shared_secret_with_camera) -> bool:
-        
-    def register_new_device(uuid:str, 
-                            ip_address:str) -> bool:
-        sql:str = """
-            INSERT OR REPLACE INTO device_registration(uuid, ip_address) VALUES ("%s", "%s");
-            """ % (uuid, ip_address)
-        return backend_sql.execute_sql(conn, sql=sql)
-    
     def register_device_credentials(uuid,
                                     cam_url:str,
                                     cam_port:int) -> bool:
@@ -42,6 +34,8 @@ def register_device_with_database(conn,
             endpoint:str = "/register-credentials"
             connection:http.client.HTTPConnection = http.client.HTTPConnection(host=cam_url, port=cam_port)
 
+            print(cam_url, cam_port)
+
             data:dict[str, str] = { 
                                     "uuid" : uuid, 
                                     "device_username" : device_username,
@@ -49,7 +43,7 @@ def register_device_with_database(conn,
                                     "shared_secret_with_camera" : shared_secret_with_camera
                                   }
             
-            json_data = json.dumps(data)
+            json_data:str = json.dumps(data)
             try:
                 connection.request('POST', endpoint, json_data, headers={"Content-Type" : "application/json"})
             except:
@@ -79,14 +73,8 @@ def register_device_with_database(conn,
     
     uuid_tup:tuple = json_data["uuid"]
     uuid:str       = uuid_tup
-    ip_address:str = json_data["ip_address"]
     cam_url:str    = json_data["cam_url"]
     cam_port:int   = json_data["cam_port"]
-
-    if register_new_device(uuid=uuid, 
-                           ip_address=ip_address) == False:
-        logging.error("Failed to register device")
-        return False
 
     if register_device_credentials(uuid=uuid, 
                                    cam_url=cam_url, 
