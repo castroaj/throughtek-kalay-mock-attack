@@ -5,6 +5,7 @@ import argparse
 import cam_business_logic
 from multiprocessing import Process
 import time 
+import os
 
 app:Flask = Flask(__name__)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
@@ -49,16 +50,16 @@ def register_credentials() -> Literal['SUCCESS', 'FAILURE']:
     else:
         return "FAILURE"
 
-@app.route("/footage", methods=['GET'])
+@app.route("/video-footage", methods=['POST'])
 def footage() -> str:
-    args = request.args
-    uuid_arg:str = args.get("uuid")
-    user_arg:str = args.get("device_username")
-    pass_arg:str = args.get("device_password")
+    json_data:dict[str, str] = request.get_json()
+    json_uuid     = json_data['uuid']
+    json_username = json_data['device_username']
+    json_password = json_data['device_password']
     
-    if device_uuid == uuid_arg:
-        if device_username == user_arg and device_password == pass_arg:
-            return "CAMERA FOOTAGE"
+    if device_uuid == json_uuid:
+        if device_username == json_username and device_password == json_password:
+            return str(bytearray(os.urandom(1000)))
         else:
             return "INCORRECT USER/PASSWORD. DENIED"
     else:
@@ -71,7 +72,7 @@ def start_flask(camera_url,
 
 # Main function
 if __name__ == "__main__":    
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.INFO)
     
     parser = argparse.ArgumentParser()
     parser.add_argument("-c", "--config_file",  help="Target domain for scraping", type=str, dest="config_file", default="camera_config.yml")

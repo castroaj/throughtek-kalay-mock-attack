@@ -36,9 +36,19 @@ def register() -> Literal['SUCCESS', 'FAILURE']:
         connection.close()
         return "FAILURE"
 
-@app.route("/view-camera-request")
+@app.route("/client-request-credentials", methods=['POST'])
 def view_camera():
-    return ""
+    json_data:dict[str, str] = request.get_json()
+    uuid:str = json_data['uuid']
+    connection:sqlite3.Connection = backend_sql.create_connection(db_file=db_file)
+    
+    device_username, device_password = rs_business_logic.get_credentials_by_uuid(connection, uuid)
+    
+    if device_username is None or device_password is None:
+        return "FAILURE"
+    else:
+        return device_username + ":" + device_password
+    
         
 
 # Main function

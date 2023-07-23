@@ -27,6 +27,8 @@ def register_device_with_database(conn,
                 device_username:str   = "admin"
                 device_password:str   = ''.join(random.choices(string.ascii_uppercase +
                                                             string.digits, k=20))
+            
+            logging.info("DETERMINED CREDENTIALS FOR UUID (%s) | %s:%s " % (uuid, device_username, device_password))
             return (device_username, device_password)
         
         def register_device_on_camera(device_username:str,
@@ -82,3 +84,20 @@ def register_device_with_database(conn,
         logging.error("Failed to register device credentials")
         return False
     return True
+
+def get_credentials_by_uuid(conn, uuid):
+    
+    sql_registration_test:str = """
+                                SELECT device_username, device_password FROM device_credentials where uuid = "%s"
+                                """ % (uuid)
+
+    rows = backend_sql.execute_sql_query(conn, sql=sql_registration_test)
+    
+    if rows is not None and len(rows) == 1:
+        device_username = rows[0][0]
+        device_password = rows[0][1]
+    else:
+        device_username = None
+        device_password = None
+        
+    return (device_username, device_password)

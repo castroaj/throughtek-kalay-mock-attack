@@ -1,8 +1,5 @@
 import http.client
 import json
-import fcntl
-import socket
-import struct
 import yaml
 
 
