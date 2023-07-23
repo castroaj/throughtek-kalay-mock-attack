@@ -21,6 +21,16 @@ def execute_sql(conn, sql) -> bool:
     conn.commit()
     return True
 
+def execute_sql_query(conn, sql):
+    try:
+        c = conn.cursor()
+        c.execute(sql)
+    except Error as e:
+        print(e)
+        return None
+    rows = c.fetchall()
+    return rows
+
 def load_database_table(sql_file:str) -> List[str]:
     sql_file:TextIOWrapper = open(sql_file)
     data:str = sql_file.read()

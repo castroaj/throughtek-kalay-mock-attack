@@ -2,6 +2,7 @@ from flask import Flask, request
 import sqlite3
 import backend_sql
 import business_logic
+import logging
 
 # Setup Database
 db_file:str  = "mock-kalay-network-registration-server.db"
@@ -21,9 +22,15 @@ def index_endpoint()-> str:
 def register():
     json_data:dict[str, str] = request.get_json()
     connection:sqlite3.Connection = backend_sql.create_connection(db_file=db_file)
-    business_logic.register_device_with_database(connection, json_data=json_data)
-    connection.close()
-    return ""
+    
+    if business_logic.register_device_with_database(connection, json_data=json_data):
+        logging.info("SUCESSFULLY REGISTERED DEVICE")
+        connection.close()
+        return "SUCCESS"
+    else:
+        logging.error("FAILED TO REGISTER DEVICE")
+        connection.close()
+        return "FAILURE"
 
 @app.route("/view-camera")
 def view_camera():
