@@ -12,20 +12,25 @@ def get_ip_address(interface) -> str:
     packed_addr = fcntl.ioctl(sock.fileno(), 0x8915, packed_iface)[20:24]
     return socket.inet_ntoa(packed_addr)
 
-def register_device(url:str,
-                    port:int, 
+def register_device(reg_url:str,
+                    reg_port:int, 
+                    cam_url:str,
+                    cam_port:int,
                     uuid:str,
                     nic:str) -> bool:
     
     endpoint:str = "/register-device"
-    connection:http.client.HTTPConnection = http.client.HTTPConnection(host=url, port=port)
+    connection:http.client.HTTPConnection = http.client.HTTPConnection(host=reg_url, port=reg_port)
 
     ip_address = get_ip_address(nic)
-    data:dict[str, str] = { "uuid" : uuid, 
-                            "ip_address" : ip_address }
+    data:dict[str, str] = { 
+                            "uuid" : uuid, 
+                            "ip_address" : ip_address,
+                            "cam_url"  : cam_url,
+                            "cam_port" : cam_port
+                          }
     
     json_data = json.dumps(data)
-    
     connection.request('POST', endpoint, json_data, headers={"Content-Type" : "application/json"})
 
     response:http.client.HTTPResponse = connection.getresponse()
@@ -35,7 +40,7 @@ def register_device(url:str,
     else:                            return False
     
 
-def request_video(host:str,
+def request_video(reg_url:str,
                   port:int, 
                   uuid:str):
     yield
@@ -50,6 +55,8 @@ def main():
     # Required
     parser.add_argument("-u1", "--reg-url", help="Target registration server url", type=str, dest="reg_url", default="127.0.0.1")
     parser.add_argument("-p1", "--reg-port", help="Target registration server port", type=int, dest="reg_port", default="5000")
+    parser.add_argument("-u2", "--cam-url", help="Target camera server url", type=str, dest="cam_url", default="127.0.0.1")
+    parser.add_argument("-p2", "--cam-port", help="Target camera server port", type=int, dest="cam_port", default="5001")
     parser.add_argument("-i", "--uuid", help="Device UUID", type=str, dest="uuid", default="12345678901234567890")
     parser.add_argument("-n", "--nic", help="Communciation Network Interface", type=str, dest="nic", default="ens33")
     
@@ -59,33 +66,37 @@ def main():
     
     args:argparse.Namespace = parser.parse_args()
 
-    url:str  = args.reg_url
-    port:int = args.reg_port
+    reg_url:str  = args.reg_url
+    reg_port:int = args.reg_port
+    cam_url:str  = args.cam_url
+    cam_port:str = args.cam_port
     uuid:str = args.uuid
     nic:str  = args.nic
     
     register:bool = args.register
     video:bool    = args.video
     
-    logging.info("URL: %s, PORT: %s, UUID: %s, NIC: %s, REGISTER-DEVICE: %s, REQUEST-VIDEO: %s" % (url, port, uuid, nic, register, video))
+    logging.info("RESISTGRATION-SERVER-URL: %s, REGISTRATION-SEVER-PORT: %s, UUID: %s, NIC: %s, REGISTER-DEVICE: %s, REQUEST-VIDEO: %s" % (reg_url, reg_port, uuid, nic, register, video))
     
     if register and video:
         logging.error("You cannot register a device and request video in a single transaction")
     
     if register:
         logging.info("REGISTERING DEVICE (%s)" % uuid)
-        if register_device(url=url,
-                        port=port,
-                        uuid=uuid,
-                        nic=nic):
+        if register_device(reg_url=reg_url,
+                           reg_port=reg_port,
+                           cam_url=cam_url,
+                           cam_port=cam_port,
+                           uuid=uuid,
+                           nic=nic):
             logging.info("DEVICE SUCCESSFULLY REGISTERED (%s)" % uuid)
         else:
             logging.error("FAILED TO REGISTER DEVICE (%s)" % uuid)
         
     if video:
-        logging.info("REGISTERING DEVICE")
-        request_video(url=url,
-                      port=port,
+        logging.info("REQUESTING VIDEO FOOTAGE")
+        request_video(url=reg_url,
+                      port=reg_url,
                       uuid=uuid)
 
 
