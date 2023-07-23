@@ -28,7 +28,10 @@ def register_device(reg_url:str,
                           }
     
     json_data = json.dumps(data)
-    connection.request('POST', endpoint, json_data, headers={"Content-Type" : "application/json"})
+    try:
+        connection.request('POST', endpoint, json_data, headers={"Content-Type" : "application/json"})
+    except:
+        return False
 
     response:http.client.HTTPResponse = connection.getresponse()
     response_string:str = response.read().decode()

@@ -92,10 +92,13 @@ if __name__ == "__main__":
     time.sleep(1)
     logging.info("ATTEMPTING TO REGISTER DEVICE (%s)" % yaml_config["uuid"])
     
-    cam_business_logic.register_device(reg_url=yaml_config["registration_server_url"],
-                                       reg_port=yaml_config["registration_server_port"],
-                                       cam_url=yaml_config["camera_url"],
-                                       cam_port=yaml_config["camera_port"],
-                                       uuid=yaml_config["uuid"])
+    if cam_business_logic.register_device(reg_url=yaml_config["registration_server_url"],
+                                          reg_port=yaml_config["registration_server_port"],
+                                          cam_url=yaml_config["camera_url"],
+                                          cam_port=yaml_config["camera_port"],
+                                          uuid=yaml_config["uuid"]) == False:
+        p.kill()
+        logging.error("NO REGISTRATION SERVER")
+        exit(-1)
     
     

@@ -60,7 +60,7 @@ def register_device_with_database(conn,
         device_username, device_password = determine_device_credentials()
   
         sql:str = """
-                INSERT OR IGNORE INTO device_credentials(uuid, device_username, device_password, device_ip_address, device_port) VALUES("%s", "%s", "%s", "%s", %s);
+                INSERT OR REPLACE INTO device_credentials(uuid, device_username, device_password, device_ip_address, device_port) VALUES("%s", "%s", "%s", "%s", %s);
                 """ % (uuid, device_username, device_password, cam_url, cam_port)
         
         if register_device_on_camera(device_username=device_username, device_password=device_password) == False:
@@ -88,16 +88,20 @@ def register_device_with_database(conn,
 def get_credentials_by_uuid(conn, uuid):
     
     sql_registration_test:str = """
-                                SELECT device_username, device_password FROM device_credentials where uuid = "%s"
+                                SELECT device_username, device_password, device_ip_address, device_port FROM device_credentials where uuid = "%s"
                                 """ % (uuid)
 
     rows = backend_sql.execute_sql_query(conn, sql=sql_registration_test)
     
     if rows is not None and len(rows) == 1:
-        device_username = rows[0][0]
-        device_password = rows[0][1]
+        device_username   = rows[0][0]
+        device_password   = rows[0][1]
+        device_ip_address = rows[0][2]
+        device_port       = rows[0][3]
     else:
         device_username = None
         device_password = None
+        device_ip_address= None
+        device_port = None
         
-    return (device_username, device_password)
+    return (device_ip_address, device_port, device_username, device_password)

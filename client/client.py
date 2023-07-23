@@ -18,8 +18,6 @@ def load_yaml_config(args):
 def request_video(reg_url:str,
                   reg_port:int, 
                   uuid:str,
-                  cam_url:str,
-                  cam_port:int,
                   duration=10):
     
     def get_cam_credentials():
@@ -40,14 +38,16 @@ def request_video(reg_url:str,
             logging.error("INVALID CREDENTIALS")
             return (None, None)
         
-        creds:list[str]     = response_string.split(":")
-        print(creds)
-        return (creds[0], creds[1])    
+        cam_info:list[str]     = response_string.split(":")
+        print(cam_info)
+        return (cam_info[0], cam_info[1], cam_info[2], cam_info[3])    
 
-    def request_video_footage(device_username,
+    def request_video_footage(device_ip_address,
+                              device_port,
+                              device_username,
                               device_password):
         endpoint:str = "/video-footage"
-        connection:http.client.HTTPConnection = http.client.HTTPConnection(host=cam_url, port=cam_port)
+        connection:http.client.HTTPConnection = http.client.HTTPConnection(host=device_ip_address, port=device_port)
 
         data:dict[str, str] = { 
                                 "uuid" : uuid, 
@@ -67,17 +67,19 @@ def request_video(reg_url:str,
 
     logging.info("REQUESTING CAMERA CREDS FROM REGISTRATION SERVER...")
     time.sleep(1)
-    device_username, device_password = get_cam_credentials()
+    device_ip_address, device_port, device_username, device_password = get_cam_credentials()
 
     if device_username is None or device_password is None:
         logging.error("FAILED TO GET CREDENTIALS (%s)" % uuid)
         return False
     
     logging.info("AQUIRED CREDS FROM REGISTRATION SERVER (%s:%s)" % (device_username, device_password))
-    time.sleep(5)
+    time.sleep(2.5)
     
     for _ in range(duration):
-        video_data = request_video_footage(device_username=device_username,
+        video_data = request_video_footage(device_ip_address=device_ip_address,
+                                                device_port=device_port,
+                                                device_username=device_username,
                                                 device_password=device_password)
         print(video_data)
         time.sleep(0.5)
@@ -101,17 +103,13 @@ def main():
 
     reg_url:str  = yaml_config["registration_server_url"]
     reg_port:int = yaml_config["registration_server_port"]
-    cam_url:str  = yaml_config["camera_url"]
-    cam_port:str = yaml_config["camera_port"]
     uuid:str     = yaml_config["uuid"]
     duration:int = yaml_config["duration"]
     
-    logging.info("UUID: %s, RESISTGRATION-SERVER-URL: %s, REGISTRATION-SEVER-PORT: %s, CAMERA-URL: %s, CAMERA-PORT: %s, DURATION: %s" % (uuid, reg_url, reg_port, cam_url, cam_port, duration))
+    logging.info("UUID: %s, RESISTGRATION-SERVER-URL: %s, REGISTRATION-SEVER-PORT: %s, DURATION: %s" % (uuid, reg_url, reg_port, duration))
     request_video(reg_url=reg_url,
                   reg_port=reg_port,
                   uuid=uuid,
-                  cam_url=cam_url,
-                  cam_port=cam_port,
                   duration=duration)
 
 if __name__ == "__main__":

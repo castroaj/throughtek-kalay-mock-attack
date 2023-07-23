@@ -42,12 +42,12 @@ def view_camera():
     uuid:str = json_data['uuid']
     connection:sqlite3.Connection = backend_sql.create_connection(db_file=db_file)
     
-    device_username, device_password = rs_business_logic.get_credentials_by_uuid(connection, uuid)
+    device_ip_adress, device_port, device_username, device_password = rs_business_logic.get_credentials_by_uuid(connection, uuid)
     
-    if device_username is None or device_password is None:
+    if device_ip_adress is None or device_port is None or device_username is None or device_password is None:
         return "FAILURE"
     else:
-        return device_username + ":" + device_password
+        return device_ip_adress + ":" + str(device_port) + ":" + device_username + ":" + device_password
     
         
 
