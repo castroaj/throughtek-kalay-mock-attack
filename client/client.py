@@ -59,7 +59,7 @@ def request_video(reg_url:str,
         try:
             connection.request('POST', endpoint, json_data, headers={"Content-Type" : "application/json"})
         except:
-            return "FAILED TO AQUIRE VIDEO FOOTAGE... ATTEMPT MADE TO '%s:%s'" % (cam_url, cam_port)
+            return "FAILED TO AQUIRE VIDEO FOOTAGE... ATTEMPT MADE TO '%s:%s'" % (device_ip_address, device_port)
 
         response:http.client.HTTPResponse = connection.getresponse()
         response_string:str = response.read().decode()
