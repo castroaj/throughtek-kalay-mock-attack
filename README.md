@@ -1,8 +1,29 @@
 # Throughtek-Kalay-Mock-Attack
 
-- Alexander Castro
-- Mock Implementaion of the Vulnerable ThroughTek-Kalay MiTM Attack
-- Reference: https://threatpost.com/bug-iot-millions-devices-attackers-eavesdrop/168729/
+## OVERVIEW
+    AUTHOR: Alexander Castro
+    DESCRIPTION: Mock Implementaion of the Vulnerable ThroughTek-Kalay MiTM Attack
+    PURPOSE: CYSE-580 Technical Demonstration
+
+---
+
+## REFERENCES
+
+    NEWS: 
+     - https://thehackernews.com/2021/06/critical-throughtek-flaw-opens-millions.html 
+     - https://aws.plainenglish.io/the-throughtek-kalay-vulnerability-is-absolutely-absurd-heres-why-it-should-worry-you-fe222549dd0d  
+     - https://industrialcyber.co/news/critical-vulnerability-found-in-throughtek-kalay-p2p-sdk-can-remotely-exploit-millions-of-iot-devices/ 
+     - https://techxplore.com/news/2021-08-vulnerability-iot-devices-throughtek-kalay.html 
+     - https://www.mandiant.com/resources/blog/mandiant-discloses-critical-vulnerability-affecting-iot-devices 
+
+    MODELS: 
+    - https://threatpost.com/bug-iot-millions-devices-attackers-eavesdrop/168729/ 
+
+    CVE:  
+    - https://unit42.paloaltonetworks.com/iot-supply-chain-cve-2021-28372/  
+
+    CISA Report: 
+    - https://www.cisa.gov/news-events/ics-advisories/icsa-21-229-01 
 
 ---
 
