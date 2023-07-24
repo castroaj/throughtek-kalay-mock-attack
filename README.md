@@ -17,13 +17,13 @@
      - https://www.mandiant.com/resources/blog/mandiant-discloses-critical-vulnerability-affecting-iot-devices 
 
     MODELS: 
-    - https://threatpost.com/bug-iot-millions-devices-attackers-eavesdrop/168729/ 
+     - https://threatpost.com/bug-iot-millions-devices-attackers-eavesdrop/168729/ 
 
     CVE:  
-    - https://unit42.paloaltonetworks.com/iot-supply-chain-cve-2021-28372/  
+     - https://unit42.paloaltonetworks.com/iot-supply-chain-cve-2021-28372/  
 
     CISA Report: 
-    - https://www.cisa.gov/news-events/ics-advisories/icsa-21-229-01 
+     - https://www.cisa.gov/news-events/ics-advisories/icsa-21-229-01 
 
 ---
 
