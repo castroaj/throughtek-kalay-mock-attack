@@ -35,8 +35,6 @@ def register_device_with_database(conn,
             endpoint:str = "/register-credentials"
             connection:http.client.HTTPConnection = http.client.HTTPConnection(host=cam_url, port=cam_port)
 
-            print(cam_url, cam_port)
-
             data:dict[str, str] = { 
                                     "uuid" : uuid, 
                                     "device_username" : device_username,

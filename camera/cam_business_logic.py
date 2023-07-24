@@ -8,7 +8,6 @@ def load_yaml_config(args):
     try:
         yaml_config = yaml.safe_load(file_stream)
     except yaml.YAMLError as e:
-        print(e)
         exit(-1)
     return yaml_config
 

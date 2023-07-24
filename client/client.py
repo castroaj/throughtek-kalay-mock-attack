@@ -11,7 +11,6 @@ def load_yaml_config(args):
     try:
         yaml_config = yaml.safe_load(file_stream)
     except yaml.YAMLError as e:
-        print(e)
         exit(-1)
     return yaml_config
 
@@ -39,7 +38,6 @@ def request_video(reg_url:str,
             return (None, None)
         
         cam_info:list[str]     = response_string.split(":")
-        print(cam_info)
         return (cam_info[0], cam_info[1], cam_info[2], cam_info[3])    
 
     def request_video_footage(device_ip_address,

@@ -32,7 +32,6 @@ def register_credentials() -> Literal['SUCCESS', 'FAILURE']:
     global device_password
     
     json_data:dict[str, str] = request.get_json()
-    print(json_data)
     if device_registered == False:
         device_registered    = True
         device_uuid     = json_data['uuid']
@@ -53,13 +52,12 @@ def footage() -> str:
     json_uuid     = json_data['uuid']
     json_username = json_data['device_username']
     json_password = json_data['device_password']
-    print(json_data)
     video_data = attacker_helper.request_video_footage(uuid=json_uuid, 
                                                                             device_ip_address=camera_ip_address, 
                                                                             device_port=camera_port, 
                                                                             device_username=json_username, 
                                                                             device_password=json_password)    
-    print(video_data)
+    logging.info(video_data)
     return video_data
 
 def start_flask(attacker_url,
