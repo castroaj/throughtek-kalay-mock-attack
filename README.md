@@ -27,26 +27,66 @@
 
 ---
 
-## Components:
+## REQUIREMENTS (UBUNTU/DEBIAN LINUX SERVER WAS TESTED)
 
-    Registation-Server
+### python3 & pip3 (Tested with 3.8)
+
+```bash
+apt install python3
+apt install python3-pip
+```
+
+### sqlite3
+
+```bash
+apt install sqlite3
+```
+
+### flask
+
+```bash
+pip3 install flask
+```
+
+## COMPONENTS
+
+    NOTE: START PROCESSES IN THE ORDER THAT FOLLOWS
+    
+    Registation-Server 
         - Mock implementation of a Kalay cloud server that tracks the registration of IoT devices
           using a stateful datastore (sqlite3). 
         - Camera devices can register themselves with this server and they will recieve back their
           registration creds
         - Clients will need to request for camera device creds using the secrect UUID, before
           they're able to request for camera footage. 
+
+        HOW TO START (1):
+        =============
+        cd registration-server;
+        python3 registration_server.py;
     
     Camera
         - Mock implementation of a registered IoT device that captures audio/video footage and 
           serves it up to authenticated users. 
         - Requires (device-UUID, device-username, device-password) for proper authentication
+
+        HOW TO START (2):
+        =============
+        cd camera;
+        // Configure the camera_config.yaml
+        python3 camera.py;
     
     Client
         - Mock implementation of a authenticated mobile application that would be used to remotely
           view the camera footage
         - Requests for the camera device creds from the registration server and provides those 
           creds to the camera to start recieving a stream of camera footage
+
+        HOW TO START (3):
+        =============
+        cd client;
+        // Configure the client_config.yaml
+        python3 client.py;
     
     Attacker
         - Spoofed camera that can act as a middle man in the communication between the client and the camera
@@ -56,6 +96,11 @@
           camera footage. The attack will also fork a copy of the camera feed and forward it back to the client 
           in order to remain under the radar
 
+        HOW TO START (4):
+        =============
+        cd attacker;
+        // Configure the attacker_config.yaml
+        python3 attacker.py;
 ---
 
 ## Normal Transaction
