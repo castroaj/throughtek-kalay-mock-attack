@@ -1,7 +1,7 @@
 # Throughtek-Kalay-Mock-Attack
 
 ## OVERVIEW
-    AUTHOR: Alexander Castro
+    TEAM MEMBERS: Alexander Castro, Nicolas Lorenzo, Nongnapat Adchariyavivit, AlReheeq AlMaktum Al Rawas
     DESCRIPTION: Mock Implementaion of the Vulnerable ThroughTek-Kalay MiTM Attack
     PURPOSE: CYSE-580 Technical Demonstration
 
